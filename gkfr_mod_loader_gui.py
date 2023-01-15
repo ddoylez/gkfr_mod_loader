@@ -24,7 +24,7 @@ def get_gkfr_files():
 
 
 def settings_window():
-    bepinex_folder_tooltip = 'Wherever your BepInEx folder is inside the GKFR install.\ne.g. steamapps/common/Garfield Kart - Furious Racing/BepInEx'
+    bepinex_folder_tooltip = 'Wherever your BepInEx folder is inside the GKFR install.\ne.g. steamapps/common/Garfield Kart - Furious Racing/BepInEx/plugins'
     local_mods_folder_tooltip = 'Wherever you keep your pool of local mod files.'
 
     layout = [[sg.T('Program Settings', font='DEFAIULT 18')],
@@ -132,23 +132,6 @@ def main():
                 mods_path = sg.user_settings_get_entry('-mods folder-')
                 gkfr_files, mods_files = get_gkfr_files()
     window.close()
-
-
-def execute_command_subprocess(command, *args, wait=False):
-    if sys.platform == 'linux':
-        arg_string = ''
-        for arg in args:
-            arg_string += ' ' + str(arg)
-        sp = subprocess.Popen(['python3' + arg_string, ], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    else:
-        expanded_args = ' '.join(args)
-        sp = subprocess.Popen([command, expanded_args], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if wait:
-        out, err = sp.communicate()
-        if out:
-            print(out.decode("utf-8"))
-        if err:
-            print(err.decode("utf-8"))
 
 
 if __name__ == '__main__':
