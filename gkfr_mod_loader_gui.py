@@ -71,8 +71,8 @@ def remove_bepinex_window():
 
 
 def settings_window():
-    bepinex_folder_tooltip = 'Wherever your BepInEx folder is inside the GKFR install.\ne.g. steamapps/common/Garfield Kart - Furious Racing'
-    local_mods_folder_tooltip = 'Wherever you keep your pool of local mod files.'
+    bepinex_folder_tooltip = 'Wherever your GKFR install is located.\ne.g. steamapps/common/Garfield Kart - Furious Racing'
+    local_mods_folder_tooltip = 'Wherever you keep your pool of .dll mod files.'
 
     layout = [[sg.T('Program Settings', font='DEFAIULT 18')],
               [sg.T('Path to GKFR Install', size=(20, 1), tooltip=bepinex_folder_tooltip),
