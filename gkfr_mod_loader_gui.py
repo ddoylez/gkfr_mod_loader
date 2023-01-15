@@ -27,7 +27,7 @@ def get_gkfr_files():
 
 
 def bepinex_window():
-    layout = [[sg.T('BepInExZip', size=(20, 1)),
+    layout = [[sg.T('BepInEx Zip', size=(20, 1)),
                sg.In(sg.user_settings_get_entry('-bepinex zip-', ''), k='-ZIP-'), sg.FileBrowse()],
               [sg.B('Install'), sg.B('Cancel')],
               ]
@@ -39,10 +39,29 @@ def bepinex_window():
         sg.user_settings_set_entry('-bepinex zip-', values['-ZIP-'])
         with zipfile.ZipFile(sg.user_settings_get_entry('-bepinex zip-'), 'r') as zip_ref:
             zip_ref.extractall(install_dir)
-        plugin_path = os.path.join(install_dir, PLUGINS_FOLDER)
-        print(install_dir)
-        print(plugin_path)
-        os.mkdir(plugin_path)
+        os.mkdir(os.path.join(install_dir, PLUGINS_FOLDER))
+        return True
+
+    return False
+
+
+def remove_bepinex_window():
+    winhttp = 'winhttp.dll'
+    config = 'doorstop_config.ini'
+    changelog = 'changelog.txt'
+
+    layout = [[sg.T('Are you sure you want to remove BepInEx?')],
+              [sg.B('Yes'), sg.B('No')],
+              ]
+
+    window = sg.Window('BepInEx Uninstall', layout, element_justification='c')
+    event, values = window.read(close=True)
+    if event == 'Yes':
+        install_dir = sg.user_settings_get_entry('-gkfr folder-', '')
+        shutil.rmtree(os.path.join(install_dir, PLUGINS_FOLDER), ignore_errors=True)
+        os.remove(os.path.join(install_dir, winhttp))
+        os.remove(os.path.join(install_dir, config))
+        os.remove(os.path.join(install_dir, changelog))
         return True
 
     return False
@@ -103,7 +122,7 @@ def make_window():
     layout = [[sg.vtop(sg.Column(left_col, element_justification='c')), sg.VSeperator(),
                sg.vtop(sg.Column(right_col, element_justification='c'))],
               [sg.HorizontalSeparator()],
-              [sg.Button('Install BepInEx'), sg.B('Settings')],
+              [sg.Button('Settings'), sg.B('Install BepInEx'), sg.B('Remove BepInEx')],
               ]
 
     # --------------------------------- Create Window ---------------------------------
@@ -158,6 +177,13 @@ def main():
                 gkfr_files, mods_files = get_gkfr_files()
         elif event == 'Install BepInEx':
             if bepinex_window() is True:
+                window.close()
+                window = make_window()
+                gkfr_path = sg.user_settings_get_entry('-gkfr folder-')
+                mods_path = sg.user_settings_get_entry('-mods folder-')
+                gkfr_files, mods_files = get_gkfr_files()
+        elif event == 'Remove BepInEx':
+            if remove_bepinex_window() is True:
                 window.close()
                 window = make_window()
                 gkfr_path = sg.user_settings_get_entry('-gkfr folder-')
