@@ -58,10 +58,13 @@ def remove_bepinex_window():
     event, values = window.read(close=True)
     if event == 'Yes':
         install_dir = sg.user_settings_get_entry('-gkfr folder-', '')
-        shutil.rmtree(os.path.join(install_dir, PLUGINS_FOLDER), ignore_errors=True)
-        os.remove(os.path.join(install_dir, winhttp))
-        os.remove(os.path.join(install_dir, config))
-        os.remove(os.path.join(install_dir, changelog))
+        try:
+            shutil.rmtree(os.path.join(install_dir, PLUGINS_FOLDER), ignore_errors=True)
+            os.remove(os.path.join(install_dir, winhttp))
+            os.remove(os.path.join(install_dir, config))
+            os.remove(os.path.join(install_dir, changelog))
+        except:
+            pass
         return True
 
     return False
