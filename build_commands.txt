@@ -1,5 +1,5 @@
 linux:
-    pyinstaller  --distpath dist/linux --onefile gkfr_mod_loader_gui.py
+    pyinstaller  --distpath dist/linux --onefile gkfr_mod_loader_gui.py --windowed
 
 windows:
-    python -m PyInstaller --hidden-import PySimpleGUI --distpath dist\win --onefile gkfr_mod_loader_gui.py
+    python -m PyInstaller --hidden-import PySimpleGUI --distpath dist\win --onefile gkfr_mod_loader_gui.py --windowed
