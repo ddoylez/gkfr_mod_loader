@@ -39,7 +39,10 @@ def bepinex_window():
         sg.user_settings_set_entry('-bepinex zip-', values['-ZIP-'])
         with zipfile.ZipFile(sg.user_settings_get_entry('-bepinex zip-'), 'r') as zip_ref:
             zip_ref.extractall(install_dir)
-        os.mkdir(os.path.join(install_dir, PLUGINS_FOLDER))
+        try:
+            os.mkdir(os.path.join(install_dir, PLUGINS_FOLDER))
+        except:
+            pass
         return True
 
     return False
@@ -175,23 +178,14 @@ def main():
             if settings_window() is True:
                 window.close()
                 window = make_window()
-                gkfr_path = sg.user_settings_get_entry('-gkfr folder-')
-                mods_path = sg.user_settings_get_entry('-mods folder-')
-                gkfr_files, mods_files = get_gkfr_files()
         elif event == 'Install BepInEx':
             if bepinex_window() is True:
                 window.close()
                 window = make_window()
-                gkfr_path = sg.user_settings_get_entry('-gkfr folder-')
-                mods_path = sg.user_settings_get_entry('-mods folder-')
-                gkfr_files, mods_files = get_gkfr_files()
         elif event == 'Remove BepInEx':
             if remove_bepinex_window() is True:
                 window.close()
                 window = make_window()
-                gkfr_path = sg.user_settings_get_entry('-gkfr folder-')
-                mods_path = sg.user_settings_get_entry('-mods folder-')
-                gkfr_files, mods_files = get_gkfr_files()
     window.close()
 
 
