@@ -3,27 +3,45 @@ import shutil
 import zipfile
 import subprocess
 import sys
+import platform
 
 import PySimpleGUI as sg
 
 PLUGINS_FOLDER = 'BepInEx/plugins/'
 
 
+def open_path(path):
+    if platform.system() == "Windows":
+        os.startfile(path)
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", path])
+    else:
+        subprocess.Popen(["xdg-open", path])
+
+
 def get_gkfr_files():
     gkfr_path = sg.user_settings_get_entry('-gkfr folder-', '')
     mods_path = sg.user_settings_get_entry('-mods folder-', '')
+    mod_files = []
+    gkfr_files = []
 
     try:
-        mods_files = os.listdir(mods_path)
+        tmp_files = os.listdir(mods_path)
+        for file in tmp_files:
+            if file.endswith('.dll'):
+                mod_files.append(file)
     except:
-        mods_files = []
+        mod_files = []
 
     try:
-        gkfr_files = os.listdir(os.path.join(gkfr_path, PLUGINS_FOLDER))
+        tmp_files = os.listdir(os.path.join(gkfr_path, PLUGINS_FOLDER))
+        for file in tmp_files:
+            if file.endswith('.dll'):
+                gkfr_files.append(file)
     except:
         gkfr_files = []
 
-    return gkfr_files, mods_files
+    return gkfr_files, mod_files
 
 
 def bepinex_window():
@@ -112,7 +130,7 @@ def make_window():
         [sg.Listbox(values=gkfr_files, select_mode=sg.SELECT_MODE_EXTENDED, size=(40, 20), key='-GKFR LIST-')],
         [sg.Text('Filter:', tooltip=filter_tooltip),
          sg.Input(size=(25, 1), enable_events=True, key='-FILTER-', tooltip=filter_tooltip)],
-        [sg.Button('Unload ->', key='-DELETE FROM-')],
+        [sg.Button('Open Folder', key='-OPEN1-'), sg.Button('Unload ->', key='-DELETE FROM-')],
     ]
 
     right_col = [
@@ -120,7 +138,7 @@ def make_window():
         [sg.Listbox(values=mods_files, select_mode=sg.SELECT_MODE_EXTENDED, size=(40, 20), key='-MODS LIST-')],
         [sg.Text('Filter:', tooltip=filter_tooltip),
          sg.Input(size=(25, 1), enable_events=True, key='-FILTER2-', tooltip=filter_tooltip)],
-        [sg.Button('<- Load', key='-COPY TO-')],
+        [sg.Button('Open Folder', key='-OPEN2-'), sg.Button('<- Load', key='-COPY TO-')],
     ]
 
     # ----- Full layout -----
@@ -186,6 +204,10 @@ def main():
             if remove_bepinex_window() is True:
                 window.close()
                 window = make_window()
+        elif event == '-OPEN1-':
+            open_path(gkfr_path)
+        elif event == '-OPEN2-':
+            open_path(mods_path)
     window.close()
 
 
