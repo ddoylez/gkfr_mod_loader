@@ -8,6 +8,7 @@ import platform
 import PySimpleGUI as sg
 
 PLUGINS_FOLDER = 'BepInEx/plugins/'
+BEPINEX_FOLDER = 'BepInEx/'
 
 
 def open_path(path):
@@ -80,7 +81,7 @@ def remove_bepinex_window():
     if event == 'Yes':
         install_dir = sg.user_settings_get_entry('-gkfr folder-', '')
         try:
-            shutil.rmtree(os.path.join(install_dir, PLUGINS_FOLDER), ignore_errors=True)
+            shutil.rmtree(os.path.join(install_dir, BEPINEX_FOLDER), ignore_errors=True)
             os.remove(os.path.join(install_dir, winhttp))
             os.remove(os.path.join(install_dir, config))
             os.remove(os.path.join(install_dir, changelog))
