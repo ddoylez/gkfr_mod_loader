@@ -206,7 +206,7 @@ def main():
                 window.close()
                 window = make_window()
         elif event == '-OPEN1-':
-            open_path(gkfr_path)
+            open_path(f'{gkfr_path}/{PLUGINS_FOLDER}')
         elif event == '-OPEN2-':
             open_path(mods_path)
     window.close()
